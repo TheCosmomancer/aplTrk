@@ -1,0 +1,152 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Register</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="{% static 'style.css' %}" rel="stylesheet">
+    </head>
+    <body>
+        <div class="flex flex-col items-center justify-center text-center h-screen">
+
+        <form method="post">
+            {% csrf_token %}
+
+            <p>
+                <label class="input validator">
+                    <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <g
+                        stroke-linejoin="round"
+                        stroke-linecap="round"
+                        stroke-width="2.5"
+                        fill="none"
+                        stroke="currentColor"
+                        >
+                        <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                        </g>
+                    </svg>
+                    <input
+                        type="text"
+                        required
+                        placeholder="Username"
+                        pattern="[A-Za-z0-9\-]*"
+                        minlength="3"
+                        maxlength="30"
+                        title=""
+                        name="username"
+                    />
+                </label>
+                <p class="label">Only letters, numbers or dash</p>
+                <br><br>
+            </p>
+
+            <p>
+                <label class="input validator">
+                    <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <g
+                        stroke-linejoin="round"
+                        stroke-linecap="round"
+                        stroke-width="2.5"
+                        fill="none"
+                        stroke="currentColor"
+                        >
+                        <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+                        <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+                        </g>
+                    </svg>
+                    <input type="email" title="" name="email" placeholder="mail@site.com" required />
+                </label>
+                <br><br>
+            </p>
+            
+            <p>
+                <select class="select validator" name="timezone" title="" required>
+                    <option disabled selected value="">Choose Timezone</option>
+                    <option value="Asia/Riyadh">Arabia Standard Time</option>
+                    <option value="America/Buenos_Aires">Argentina Time</option>
+                    <option value="Australia/Melbourne">Australian Eastern Standard Time</option>
+                    <option value="Australia/Perth">Australian Western Standard Time</option>
+                    <option value="Asia/Dhaka">Bangladesh Standard Time</option>
+                    <option value="America/Sao_Paulo">Brasília Time</option>
+                    <option value="Europe/Amsterdam">Central European Time</option>
+                    <option value="America/Chicago">Central Standard Time</option>
+                    <option value="Asia/Shanghai">China Standard Time</option>
+                    <option value="America/Bogota">Colombia Time</option>
+                    <option value="Africa/Cairo">Eastern European Time</option>
+                    <option value="America/New_York">Eastern Standard Time</option>
+                    <option value="Pacific/Fiji">Fiji Time</option>
+                    <option value="Africa/Accra">Ghana Mean Time</option>
+                    <option value="Europe/London">Greenwich Mean Time</option>
+                    <option value="Asia/Dubai">Gulf Standard Time</option>
+                    <option value="Pacific/Honolulu">Hawaii-Aleutian Standard Time</option>
+                    <option value="Asia/Hong_Kong">Hong Kong Time</option>
+                    <option value="Asia/Kolkata">India Standard Time</option>
+                    <option value="Asia/Bangkok">Indochina Time</option>
+                    <option value="Asia/Tehran">Iran Standard Time</option>
+                    <option value="Asia/Tokyo">Japan Standard Time</option>
+                    <option value="Asia/Seoul">Korea Standard Time</option>
+                    <option value="Europe/Moscow">Moscow Standard Time</option>
+                    <option value="America/Denver">Mountain Standard Time</option>
+                    <option value="Pacific/Auckland">New Zealand Standard Time</option>
+                    <option value="America/Los_Angeles">Pacific Standard Time</option>
+                    <option value="Asia/Karachi">Pakistan Standard Time</option>
+                    <option value="America/Lima">Peru Time</option>
+                    <option value="Asia/Manila">Philippines Standard Time</option>
+                    <option value="Asia/Singapore">Singapore Standard Time</option>
+                    <option value="Africa/Johannesburg">South Africa Standard Time</option>
+                    <option value="Europe/Istanbul">Turkey Time</option>
+                    <oprion value="Africa/Lagos">West Africa Time</oprion>
+                    <option value="Africa/Casablanca">Western European Time</option>
+                    <option value="Asia/Jakarta">Western Indonesia Time</option>
+                </select>
+                <br><br>
+            </p>
+
+            <p>
+                <label class="input validator">
+                    <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <g
+                        stroke-linejoin="round"
+                        stroke-linecap="round"
+                        stroke-width="2.5"
+                        fill="none"
+                        stroke="currentColor"
+                        >
+                        <path
+                            d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"
+                        ></path>
+                        <circle cx="16.5" cy="7.5" r=".5" fill="currentColor"></circle>
+                        </g>
+                    </svg>
+                    <input
+                        type="password"
+                        required
+                        placeholder="Password"
+                        minlength="8"
+                        title=""
+                        name="password"
+                    />
+                </label>
+                <p class="label">Must be more than 8 characters</p>
+                <br><br>
+            </p>
+            <button class="btn btn-primary" type="submit">Register</button>
+            <br><br>
+        </form>
+
+        {% if message %}
+            <div role="alert" class="alert alert-error">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span>{{ message }}</span>
+                    </div><br>
+        {% endif %}
+
+        <p>Already have an account? <a class="text-blue-600" href="{% url 'login' %}">Login here</a>.</p>
+        </div>
+    </body>
+</html>
