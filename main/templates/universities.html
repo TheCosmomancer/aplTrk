@@ -1,0 +1,60 @@
+{% extends "layout.html" %}
+{% load static %}
+
+{% block script %}<script src="{% static 'search.js' %}"></script>{% endblock %}
+
+{% block universities_active %}menu-active{% endblock %}
+
+{% block body %}
+<div class="flex flex-row justify-between">
+  <label class="input grow">
+    <span style="font-family: 'JetBrainsMono Nerd Font';"></span>
+    <input id="searchbar" type="search" class="grow" placeholder="Filter By Name, City, Country..." autofocus>
+  </label>
+  {% if user.is_superuser %}<form action="{% url 'newuni' %}" method="get" class="inline">
+      <button type="submit" class="btn btn-square btn-ghost btn-success" style="font-family: 'JetBrainsMono Nerd Font';"></button>
+  </form>{% endif %}
+</div>
+
+<ul class="list bg-base-100 rounded-box shadow-md">
+
+    {% for uni in universities %}
+    
+    <li class="toggle-on-search" data-name="{{ uni.name }}{{ uni.city }}{{ uni.country }}">
+        <div class="list-row">
+        <div>
+        <div class="text-lg" >{{ uni.name }}</div>
+        <div class="text-xs font-semibold opacity-70">{{ uni.city }}, {{ uni.country }}</div>
+        </div>
+            <p class="list-col-wrap text-xs">
+            {% if uni.note %}{{ uni.note }}{% endif %}
+            </p>
+        <button class="btn btn-square btn-ghost opacity-0"></button>
+        {% if user.is_superuser %}
+            <form action="{% url 'unishop' %}" method="post" class="inline">
+                {% csrf_token %}
+                <input type="hidden" name="id" value="{{ uni.id }}">
+                <button type="submit" name="action" value="remove" class="btn btn-square btn-ghost btn-error" style="font-family: 'JetBrainsMono Nerd Font';"></button>
+            </form>
+            <form action="{% url 'unishop' %}" method="get" class="inline">
+                <input type="hidden" name="id" value="{{ uni.id }}">
+                <button type="submit" name="action" value="edit" class="btn btn-square btn-ghost btn-warning" style="font-family: 'JetBrainsMono Nerd Font';"></button>
+            </form>
+        <form action="{% url 'newprf' %}" method="get" class="inline">
+            <input type="hidden" name="id" value="{{ uni.id }}">
+            <button type="submit" class="btn btn-square btn-ghost btn-success" style="font-family: 'JetBrainsMono Nerd Font';"></button>
+        </form>
+        <form action="{% url 'newcrs' %}" method="get" class="inline">
+            <input type="hidden" name="id" value="{{ uni.id }}">
+            <button type="submit" class="btn btn-square btn-ghost btn-success" style="font-family: 'JetBrainsMono Nerd Font';"></button>
+        </form>
+        {% endif %}
+        {% if uni.portal_link %}<a href="{{ uni.portal_link}}" class="btn btn-square btn-ghost text-info" style="font-family: 'JetBrainsMono Nerd Font';">󰖟</a>{% endif %}
+        </div>
+    </li>
+
+    {% endfor %}
+
+</ul>
+
+{% endblock %}

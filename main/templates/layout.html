@@ -3,15 +3,100 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>{% block title %}University Apply Tracker{% endblock %}</title>
+        <title>{% block title %}Apply Tracker{% endblock %}</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" type="image/png" href="{% static 'logo.png' %}" sizes="512x512" />
         <link href="{% static 'style.css' %}" rel="stylesheet">
-        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.17.5/dist/cdn.min.js"></script>
-        <script src="{% static 'script.js' %}"></script>
+        <!-- <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.17.5/dist/cdn.min.js"></script> -->
+        {% block script %}
+        {% endblock %}
     </head>
     <body>
-        {% block body %}
-        {% endblock %}
+        <div class="drawer lg:drawer-open">
+            <input id="my-drawer-4" type="checkbox" class="drawer-toggle inline" />
+            <div class="drawer-content">
+                <nav class="navbar w-full bg-base-300">
+                <label for="my-drawer-4" aria-label="open sidebar" class="btn btn-square btn-ghost drawer-button">
+                <span style="font-family: 'JetBrainsMono Nerd Font';">󰘁</span></label>
+                <div class="px-4">Apply Tracker</div>
+                </nav>
+                <div class="p-4">
+                    {% block body %}
+                    {% endblock %}
+                </div>
+            </div>
+
+            <div class="drawer-side is-drawer-close:overflow-visible">
+                <label for="my-drawer-4" aria-label="close sidebar" class="drawer-overlay"></label>
+                <div class="flex min-h-full flex-col items-start bg-base-200 is-drawer-close:w-14 is-drawer-open:w-64">
+                <ul class="menu w-full grow">
+                    <li>
+                    <a href="{% url 'index' %}" class="is-drawer-close:tooltip is-drawer-close:tooltip-right {% block homepage_active %}{% endblock %}" data-tip="Homepage">
+                        <span style="font-family: 'JetBrainsMono Nerd Font';"></span><span class="is-drawer-close:hidden">Homepage</span>
+                    </a>
+                    </li>
+                    {% if user.is_authenticated %}
+                        <li>
+                        <a href="{% url 'applications' %}" class="is-drawer-close:tooltip is-drawer-close:tooltip-right {% block applications_active %}{% endblock %}" data-tip="Applications">
+                            <span style="font-family: 'JetBrainsMono Nerd Font';"></span><span class="is-drawer-close:hidden">Applications</span></span>
+                        </a>
+                        </li>
+                        <li>
+                        <a href="{% url 'calendar' %}" class="is-drawer-close:tooltip is-drawer-close:tooltip-right {% block calendar_active %}{% endblock %}" data-tip="Calendar">
+                            <span style="font-family: 'JetBrainsMono Nerd Font';">󱁳</span><span class="is-drawer-close:hidden">Calendar <span class="badge badge-xs rounded-full badge-{{ calendar_status }}"></span></span></span>
+                        </a>
+                        <p style="display: none;" class="badge-success badge-warning badge-error"></p>
+                        </li>
+                        <li>
+                        <a href="{% url 'tasks' %}" class="is-drawer-close:tooltip is-drawer-close:tooltip-right {% block tasks_active %}{% endblock %}" data-tip="Tasks">
+                            <span style="font-family: 'JetBrainsMono Nerd Font';"></span><span class="is-drawer-close:hidden">Tasks <span class="badge badge-xs badge-soft badge-Accent">{{ task_count }}</span></span></span>
+                        </a>
+                        </li>
+                        <li>
+                        <a href="{% url 'documents' %}" class="is-drawer-close:tooltip is-drawer-close:tooltip-right {% block documents_active %}{% endblock %}" data-tip="Documents">
+                            <span style="font-family: 'JetBrainsMono Nerd Font';">󱔗</span><span class="is-drawer-close:hidden">Documents</span></span>
+                        </a>
+                        </li>
+                    {% endif %}
+                    <li>
+                    <a href="{% url 'universities' %}" class="is-drawer-close:tooltip is-drawer-close:tooltip-right {% block universities_active %}{% endblock %}" data-tip="Universities">
+                        <span style="font-family: 'JetBrainsMono Nerd Font';"></span><span class="is-drawer-close:hidden">Universities</span></span>
+                    </a>
+                    </li>
+                    <li>
+                    <a href="{% url 'courses' %}" class="is-drawer-close:tooltip is-drawer-close:tooltip-right {% block courses_active %}{% endblock %}" data-tip="Courses">
+                        <span style="font-family: 'JetBrainsMono Nerd Font';"></span><span class="is-drawer-close:hidden">Courses</span></span>
+                    </a>
+                    </li>
+                    <li>
+                    <a href="{% url 'professors' %}" class="is-drawer-close:tooltip is-drawer-close:tooltip-right {% block professors_active %}{% endblock %}" data-tip="Professors">
+                        <span style="font-family: 'JetBrainsMono Nerd Font';"></span><span class="is-drawer-close:hidden">Professors</span></span>
+                    </a>
+                    </li>
+                </ul>
+                <ul class="menu w-full">
+                    <li>
+                    <a href="{% url 'manual' %}" class="is-drawer-close:tooltip is-drawer-close:tooltip-right {% block manual_active %}{% endblock %}" data-tip="Manual">
+                        <span style="font-family: 'JetBrainsMono Nerd Font';"></span><span class="is-drawer-close:hidden">Manual</span></span>
+                    </a>
+                    </li>
+                    {% if user.is_authenticated %}
+                        <li>
+                        <a href="{% url 'logout' %}" class="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Logout">
+                            <span style="font-family: 'JetBrainsMono Nerd Font';"></span><span class="is-drawer-close:hidden">Logout</span></span>
+                        </a>
+                        </li>
+                    {% else %}
+                        <li>
+                        <a href="{% url 'login' %}" class="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Login">
+                            <span style="font-family: 'JetBrainsMono Nerd Font';">󰍂</span><span class="is-drawer-close:hidden">Login</span></span>
+                        </a>
+                        </li>
+                    {% endif %}
+                </ul>
+                </div>
+            </div>
+        </div>
     </body>
 </html>

@@ -6,6 +6,7 @@
         <title>Login</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" type="image/png" href="{% static 'logo.png' %}" sizes="512x512" />
         <link href="{% static 'style.css' %}" rel="stylesheet">
     </head>
     <body>
@@ -16,18 +17,7 @@
 
             <p>
                 <label class="input validator">
-                    <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                        <g
-                        stroke-linejoin="round"
-                        stroke-linecap="round"
-                        stroke-width="2.5"
-                        fill="none"
-                        stroke="currentColor"
-                        >
-                        <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="12" cy="7" r="4"></circle>
-                        </g>
-                    </svg>
+                    <span style="font-family: 'JetBrainsMono Nerd Font';"></span>
                     <input
                         type="text"
                         required
@@ -44,26 +34,12 @@
 
             <p>
                 <label class="input validator">
-                    <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                        <g
-                        stroke-linejoin="round"
-                        stroke-linecap="round"
-                        stroke-width="2.5"
-                        fill="none"
-                        stroke="currentColor"
-                        >
-                        <path
-                            d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"
-                        ></path>
-                        <circle cx="16.5" cy="7.5" r=".5" fill="currentColor"></circle>
-                        </g>
-                    </svg>
+                    <span style="font-family: 'JetBrainsMono Nerd Font';"></span>
                     <input
                         type="password"
                         required
                         placeholder="Password"
                         minlength="8"
-                        pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
                         title=""
                         name="password"
                     />
@@ -83,7 +59,7 @@
                     </div><br>
         {% endif %}
 
-        <p>Don't have an account? <a class="text-blue-600" href="{% url 'register' %}">Register here</a>.</p>
+        <p>Don't have an account? <a class="text-info" href="{% url 'register' %}">Register here</a>.</p>
         </div>
     </body>
 </html>

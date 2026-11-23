@@ -1,0 +1,98 @@
+{% extends "layout.html" %}
+{% load static %}
+{% load file_extras %}
+
+{% block script %}<script src="{% static 'search.js' %}"></script>{% endblock %}
+
+{% block applications_active %}menu-active{% endblock %}
+
+{% block body %}
+<div class="flex flex-row justify-between">
+  <label class="input grow">
+    <span style="font-family: 'JetBrainsMono Nerd Font';"></span>
+    <input id="searchbar" type="search" class="grow" placeholder="Filter By Course Name, University Name, Status..." autofocus>
+  </label>
+</div>
+
+<ul class="list bg-base-100 rounded-box shadow-md">
+
+    {% for apl in applications %}
+    
+    <li class="toggle-on-search border border-secondary rounded-md mt-2" data-name="{{ apl.course.name }}{{ apl.course.university.name }}{{ apl.status }}">
+        <div class="p-4">
+        <span class="text-lg" >{{ apl.course.name }}</span>
+        <br>
+        <span class="text-xs font-semibold opacity-70">{{ apl.course.university.name }}</span><br>
+        <span class="list-col-wrap text-xs">
+        {% if apl.note %}{{ apl.note }}{% endif %}
+        </span><br><div class="text-end">
+        <form action="{% url 'aplshop' %}" method="post" class="inline">
+            {% csrf_token %}
+            <input type="hidden" name="id" value="{{ apl.id }}">
+            <button type="submit" name="action" value="remove" class="btn btn-square btn-ghost btn-error" style="font-family: 'JetBrainsMono Nerd Font';"></button>
+        </form>
+        <form action="{% url 'aplshop' %}" method="get" class="inline">
+            <input type="hidden" name="id" value="{{ apl.id }}">
+            <button type="submit" name="action" value="edit" class="btn btn-square btn-ghost btn-warning" style="font-family: 'JetBrainsMono Nerd Font';"></button>
+        </form>
+        <form action="{% url 'newtask' %}" method="get" class="inline">
+            <input type="hidden" name="id" value="{{ apl.id }}">
+            <input type="hidden" name="target" value="application">
+            <button type="submit" class="btn btn-square btn-ghost btn-success" style="font-family: 'JetBrainsMono Nerd Font';"></button>
+        </form>
+        <button class="float-end btn w-37" popovertarget="popover-1" style="anchor-name:--anchor-1">
+        {{apl.status}}
+        </button>
+        <form action="{% url 'aplshop' %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="id" value="{{ apl.id }}">
+            <input type="hidden" name="action" value="status">
+            <ul class="dropdown menu w-37 rounded-box bg-base-100 shadow-sm"
+                popover id="popover-1" style="position-anchor:--anchor-1">
+                <li><button type="submit" name="status" value="Not Started">Not Started</button></li>
+                <li><button type="submit" name="status" value="Preparing">Preparing</button></li>
+                <li><button type="submit" name="status" value="Ready to Submit">Ready to Submit</button></li>
+                <li><button type="submit" name="status" value="Submitted">Submitted</button></li>
+                <li><button type="submit" name="status" value="Under Review">Under Review</button></li>
+                <li><button type="submit" name="status" value="Interview">Interview</button></li>
+                <li><button type="submit" name="status" value="Rejected">Rejected</button></li>
+                <li><button type="submit" name="status" value="Offer Received">Offer Received</button></li>
+                <li><button type="submit" name="status" value="Accepted">Accepted</button></li>
+                <li><button type="submit" name="status" value="Other">Other</button></li>
+            </ul>
+        </form>
+        </div>
+        </div>
+
+        <details class="collapse collapse-plus bg-base-100 border border-base-300" name="my-accordion-det-1">
+        <summary class="collapse-title font-semibold">Documents</summary>
+        <div class="collapse-content text-sm list-row flex justify-center">
+            <div class="overflow-x-auto">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Title</th>
+                        <th>Link</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for doc in apl.documents.all %}
+                        <tr>
+                            <th>{{ forloop.counter }}</th>
+                            <td>{{ doc.title }}</td>
+                            <td><a href="{% url 'documents' %}?q={{ doc.title }}" class="btn btn-square btn-ghost text-info" style="font-family: 'JetBrainsMono Nerd Font';">󰖟</a></td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        </details>
+    </li>
+
+    {% endfor %}
+
+</ul>
+
+{% endblock %}

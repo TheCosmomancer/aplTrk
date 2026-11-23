@@ -1,0 +1,66 @@
+{% extends "layout.html" %}
+
+{% block applications_active %}menu-active{% endblock %}
+
+{% block body %}
+
+<form class="flex flex-col gap-4 p-4 min-h-200" action="{% url 'aplshop' %}" method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  {% if id %}<input type="hidden" name="id" value="{{ id }}">{% endif %}
+  <input type="hidden" name="course" value="{{ course.id }}">
+    <fieldset class="fieldset w-full max-w-md mx-auto">
+      <label class="fieldset-legend" for="disabled">Course</label>
+      <input type="text" id="disabled" value="{{ course.name }} at {{ course.university.name }}" class="input w-full" disabled />
+    </fieldset>
+  <input type="hidden" name="action" value="{% if action %}{{ action }}{% else %}new{% endif %}">
+  <fieldset class="fieldset w-full max-w-md mx-auto">
+    <label class="fieldset-legend" for="status">Status</label>
+    <select name="status" class="input w-full" id="status" required>
+      <option {% if not status %}selected{% endif %} disabled value="">Please Select</option>
+      <option {% if status == 'Not Started' %}selected{% endif %} value="Not Started">Not Started</option>
+      <option {% if status == 'Preparing' %}selected{% endif %} value="Preparing">Preparing</option>
+      <option {% if status == 'Ready to Submit' %}selected{% endif %} value="Ready to Submit">Ready to Submit</option>
+      <option {% if status == 'Submitted' %}selected{% endif %} value="Submitted">Submitted</option>
+      <option {% if status == 'Under Review' %}selected{% endif %} value="Under Review">Under Review</option>
+      <option {% if status == 'Interview' %}selected{% endif %} value="Interview">Interview</option>
+      <option {% if status == 'Rejected' %}selected{% endif %} value="Rejected">Rejected</option>
+      <option {% if status == 'Offer Received' %}selected{% endif %} value="Offer Received">Offer Received</option>
+      <option {% if status == 'Accepted' %}selected{% endif %} value="Accepted">Accepted</option>
+      <option {% if status == 'Other' %}selected{% endif %} value="Other">Other</option>
+    </select>
+  </fieldset>
+
+  <details class="collapse collapse-plus bg-base-100 border border-base-300 fieldset w-full max-w-md mx-auto" name="my-accordion-det-1">
+  <summary class="collapse-title font-semibold">Documents</summary>
+  <div class="collapse-content text-sm list-row flex justify-center">
+      <div class="overflow-x-auto">
+          <table class="table">
+              <thead>
+              <tr>
+                  <th>Title</th>
+              </tr>
+              </thead>
+              <tbody>
+              {% for doc in user.documents.all %}
+                  <tr>
+                      <td>{{ doc.title }}</td>
+                      <td><input type="checkbox" name="documents" value="{{ doc.id }}" class="checkbox checkbox-xs checkbox-secondary checked:checkbox-success mr-1" {% if doc.id in doc_ids %}checked{% endif %}></td>
+                  </tr>
+              {% endfor %}
+              </tbody>
+          </table>
+      </div>
+  </div>
+  </details>
+
+  <fieldset class="fieldset flex-1 flex flex-col mx-auto w-200 max-w-75-sc">
+    <legend class="fieldset-legend">Notes</legend>
+    <textarea class="textarea w-full flex-1 min-h-48 resize-none" name="note" placeholder="Notes, Links, etc.">{% if editnote %}{{ editnote }}{% endif %}</textarea>
+    <div class="label">Optional</div>
+  </fieldset>
+
+  <button class="btn btn-primary w-full max-w-md mx-auto" type="submit">Save</button>
+</form>
+
+{% endblock %}
+

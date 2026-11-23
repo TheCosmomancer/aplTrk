@@ -1,0 +1,92 @@
+{% extends "layout.html" %}
+{% load static %}
+
+{% block script %}<script src="{% static 'search.js' %}"></script>{% endblock %}
+
+{% block courses_active %}menu-active{% endblock %}
+
+{% block body %}
+<div class="flex flex-row justify-between">
+  <label class="input grow">
+    <span style="font-family: 'JetBrainsMono Nerd Font';"></span>
+    <input id="searchbar" type="search" class="grow" placeholder="Filter By Name, University Name..." autofocus>
+  </label>
+</div>
+
+<ul class="list bg-base-100 rounded-box shadow-md">
+
+    {% for crs in courses %}
+    
+    <li class="toggle-on-search" data-name="{{ crs.name }}{{ crs.university.name }}">
+        <div class="list-row">
+        <div>
+        <div class="text-lg" >{{ crs.name }}</div>
+        <div class="text-xs font-semibold opacity-70">{{ crs.university.name }}</div>
+        </div>
+        <button class="btn btn-square btn-ghost opacity-0"></button>
+        {% if user.is_superuser %}
+            <form action="{% url 'crsshop' %}" method="post" class="inline">
+                {% csrf_token %}
+                <input type="hidden" name="id" value="{{ crs.id }}">
+                <button type="submit" name="action" value="remove" class="btn btn-square btn-ghost btn-error" style="font-family: 'JetBrainsMono Nerd Font';"></button>
+            </form>
+            <form action="{% url 'crsshop' %}" method="get" class="inline">
+                <input type="hidden" name="id" value="{{ crs.id }}">
+                <button type="submit" name="action" value="edit" class="btn btn-square btn-ghost btn-warning" style="font-family: 'JetBrainsMono Nerd Font';"></button>
+            </form>
+        {% endif %}
+        <form action="{% url 'newapl' %}" method="get" class="inline">
+            <input type="hidden" name="id" value="{{ crs.id }}">
+            <button type="submit" class="btn btn-square btn-ghost btn-success" style="font-family: 'JetBrainsMono Nerd Font';"></button>
+        </form>
+        {% if crs.portal_link %}<a href="{{ crs.portal_link}}" class="btn btn-square btn-ghost text-info" style="font-family: 'JetBrainsMono Nerd Font';">󰖟</a>{% endif %}
+        </div>
+
+        <details class="collapse collapse-plus bg-base-100 border border-base-300" name="my-accordion-det-1">
+        <summary class="collapse-title font-semibold">Details</summary>
+        <div class="collapse-content text-sm list-row flex justify-center">
+            <div class="overflow-x-auto w-full">
+                <table class="table">
+                    <tbody>
+                    <tr>
+                        <th>University</th>
+                        <td>{{ crs.university.name }}{% if crs.university.city %}, {{ crs.university.city }}{% endif %}{% if crs.university.country %}, {{ crs.university.country }}{% endif %}</td>
+                    </tr>
+                    <tr>
+                        <th>Application Fee</th>
+                        <td>{{ crs.application_fees }}{% if crs.is_fee_wavabe %} <span class="badge badge-soft badge-success badge-xs">Wavable</span>{% endif %}</td>
+                    </tr>
+                    <tr>
+                        <th>Scholarship 
+                        {% if crs.has_scholarship %}
+                            <span class="badge badge-soft badge-success badge-xs">Available</span>
+                        {% else %}
+                            <span class="badge badge-soft badge-error badge-xs">Not Available</span>
+                        {% endif %}
+                    </th>
+                        <td>
+                        {% if crs.has_scholarship and crs.scholarship_details %}<p class="whitespace-pre-line mt-1">{{ crs.scholarship_details }}</p>{% else %}<p class="whitespace-pre-line mt-1">-</p>{% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Required Documents</th>
+                        <td class="whitespace-pre-line">{{ crs.required_documents }}</td>
+                    </tr>
+                    {% if crs.note %}
+                    <tr>
+                        <th>Notes</th>
+                        <td class="whitespace-pre-line">{{ crs.note }}</td>
+                    </tr>
+                    {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        </details>
+    </li>
+
+    {% endfor %}
+
+</ul>
+
+{% endblock %}

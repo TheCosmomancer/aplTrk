@@ -1,0 +1,67 @@
+{% extends "layout.html" %}
+
+{% block courses_active %}menu-active{% endblock %}
+
+{% block body %}
+
+<form class="flex flex-col gap-4 p-4 min-h-200" action="{% url 'crsshop' %}" method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  {% if id %}<input type="hidden" name="id" value="{{ id }}">{% endif %}
+  <input type="hidden" name="university" value="{{ university.id }}">
+    <fieldset class="fieldset w-full max-w-md mx-auto">
+      <label class="fieldset-legend" for="disabled">University</label>
+      <input type="text" id="disabled" value="{{ university.name }}" class="input w-full" disabled />
+    </fieldset>
+  <input type="hidden" name="action" value="{% if action %}{{ action }}{% else %}new{% endif %}">
+
+  
+  <fieldset class="fieldset w-full max-w-md mx-auto">
+    <label class="fieldset-legend" for="name">Name</label>
+    <input type="text" id="name" name="name" class="input w-full" placeholder="Course" {% if edittitle %}value="{{ edittitle }}"{% endif %} required>
+  </fieldset>
+
+  <fieldset class="fieldset flex-1 flex flex-col mx-auto w-200 max-w-75-sc">
+    <legend class="fieldset-legend">Required Documents</legend>
+    <textarea class="textarea w-full flex-1 min-h-48 resize-none" name="docs" placeholder="CV, ID, LoR, etc." required>{% if editdocs %}{{ editdocs }}{% endif %}</textarea>
+  </fieldset>
+  
+  <fieldset class="fieldset w-full max-w-md mx-auto">
+    <label class="fieldset-legend" for="portal">Portal URL</label>
+    <input type="url" id="portal" name="portal" class="input validator w-full" placeholder="https://" value="{% if editportal %}{{ editportal }}{% endif %}"
+    pattern="^(https?://)?([a-zA-Z0-9]([a-zA-Z0-9-].*[a-zA-Z0-9])?.)+[a-zA-Z].*$" 
+    title="Must be valid URL" />
+    <div class="label">Optional</div>
+  </fieldset>
+
+  <fieldset class="fieldset w-full max-w-md mx-auto">
+    <label class="fieldset-legend inline" for="scholar">Are Scholarships Available?</label>
+    <input type="checkbox" id="scholar" name="scholar" class="input checkbox checkbox-secondary checked:checkbox-success" {% if editscholar %}checked{% endif %}>
+  </fieldset>
+
+  <fieldset class="fieldset flex-1 flex flex-col mx-auto w-200 max-w-75-sc">
+    <legend class="fieldset-legend">Scholarship Details</legend>
+    <textarea class="textarea w-full flex-1 min-h-48 resize-none" name="detail" placeholder="Criteria, etc.">{% if editdetail %}{{ editdetail }}{% endif %}</textarea>
+    <div class="label">Optional</div>
+  </fieldset>
+
+  <fieldset class="fieldset w-full max-w-md mx-auto">
+    <label class="fieldset-legend" for="fee">Application Fee</label>
+    <input type="text" id="fee" name="fee" class="input w-full" placeholder="$20" {% if editfee %}value="{{ editfee }}"{% endif %} required>
+  </fieldset>
+
+  <fieldset class="fieldset w-full max-w-md mx-auto">
+    <label class="fieldset-legend inline" for="wave">Is Application Fee Wavable?</label>
+    <input type="checkbox" id="wave" name="wave" class="input checkbox checkbox-secondary checked:checkbox-success" {% if editwave %}checked{% endif %}>
+  </fieldset>
+
+  <fieldset class="fieldset flex-1 flex flex-col mx-auto w-200 max-w-75-sc">
+    <legend class="fieldset-legend">Notes</legend>
+    <textarea class="textarea w-full flex-1 min-h-48 resize-none" name="note" placeholder="Notes, Links, etc.">{% if editnote %}{{ editnote }}{% endif %}</textarea>
+    <div class="label">Optional</div>
+  </fieldset>
+
+  <button class="btn btn-primary w-full max-w-md mx-auto" type="submit">Save</button>
+</form>
+
+{% endblock %}
+

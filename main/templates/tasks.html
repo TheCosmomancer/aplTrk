@@ -1,0 +1,73 @@
+{% extends "layout.html" %}
+{% load static %}
+{% load file_extras %}
+
+{% block script %}<script src="{% static 'search.js' %}"></script>{% endblock %}
+
+{% block tasks_active %}menu-active{% endblock %}
+
+{% block body %}
+<div class="flex flex-row justify-between">
+  <label class="input grow">
+    <span style="font-family: 'JetBrainsMono Nerd Font';"></span>
+    <input id="searchbar" type="search" class="grow" placeholder="Filter By Name, Application Course Name, Document Name..." autofocus>
+  </label>
+  <form action="{% url 'newtask' %}" method="get" class="inline">
+      <input type="hidden" name="id" value="-1">
+      <input type="hidden" name="target" value="task">
+      <button type="submit" class="btn btn-square btn-ghost btn-success" style="font-family: 'JetBrainsMono Nerd Font';"></button>
+  </form>
+</div>
+
+<ul class="list bg-base-100 rounded-box shadow-md">
+
+    {% for task in tasks %}
+    
+    <li class="toggle-on-search border border-secondary rounded-md mt-2" data-name="{{ task.title }}{% if task.application %}{{ task.application.course.name }}{% endif %}{% if task.document %}{{ task.document.title }}{% endif %}">
+        <div class="p-4">
+        <form class="inline" action="{% url 'taskshop' %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="id" value="{{ task.id }}">
+            <input type="hidden" name="action" value="toggle">
+            <input type="checkbox" id="{{ task.title }}{{ task.id }}" class="checkbox checkbox-xs {% if not task.completed and task.is_over %}checkbox-error{% else %}checkbox-secondary{% endif %} checked:checkbox-success mr-1" onchange="this.form.submit();" {% if task.completed %}checked{% endif %}>
+            <label for="{{ task.title }}{{ task.id }}" class="text-lg" >{{ task.title }}</label>
+        </form>
+        {% if task.deadline %}<br><span class="text-xs font-semibold opacity-70">Due Date: {{ task.deadline }}</span>{% endif %}
+        <br><br>
+        <span class="list-col-wrap text-xs">
+        {% if task.content %}{{ task.content }}{% endif %}
+        </span><br><div class="text-end">
+        <form action="{% url 'taskshop' %}" method="post" class="inline">
+            {% csrf_token %}
+            <input type="hidden" name="id" value="{{ task.id }}">
+            <button type="submit" name="action" value="remove" class="btn btn-square btn-ghost btn-error" style="font-family: 'JetBrainsMono Nerd Font';"></button>
+        </form>
+        <form action="{% url 'taskshop' %}" method="get" class="inline">
+            <input type="hidden" name="id" value="{{ task.id }}">
+            <button type="submit" name="action" value="edit" class="btn btn-square btn-ghost btn-warning" style="font-family: 'JetBrainsMono Nerd Font';"></button>
+        </form>
+        {% if task.document %}<a href="{% url 'documents' %}?q={{ task.document.title }}" class="btn btn-square btn-ghost text-info" style="font-family: 'JetBrainsMono Nerd Font';">󰈙</a>{% endif %}
+        {% if task.application %}<a href="{% url 'applications' %}?q={{ task.application.course.name }}{{ task.application.course.university.name }}" class="btn btn-square btn-ghost text-info" style="font-family: 'JetBrainsMono Nerd Font';"></a>{% endif %}
+        </div></div>
+
+        {% if task.file %}
+        <details class="collapse collapse-plus bg-base-100 border border-base-300" name="my-accordion-det-1">
+        <summary class="collapse-title font-semibold">{{ task.filename }}</summary>
+        <div class="collapse-content text-sm list-row flex justify-center">
+            {% if task.file %}
+                {% if task.file|is_image %}
+                    <img src="{{ task.file.url }}" alt="{{ task.title|default:'' }}" class="max-h-200 max-w-75-sc" loading="lazy">
+                {% else %}
+                    <iframe src="{{ task.file.url }}" class="h-150 w-full max-h-75-sc max-w-75-sc" loading="lazy"></iframe>
+                {% endif %}
+            {% endif %}
+        </div>
+        </details>
+        {% endif %}
+    </li>
+
+    {% endfor %}
+
+</ul>
+
+{% endblock %}

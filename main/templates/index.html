@@ -1,0 +1,82 @@
+{% extends "layout.html" %}
+{% load static %}
+
+{% block homepage_active %}menu-active{% endblock %}
+
+{% block body %}
+<div class="hero bg-base-200 rounded-box mb-6">
+    <div class="hero-content flex-col lg:flex-row gap-8 py-10">
+        <img src="{% static 'logo.png' %}" alt="Apply Tracker logo" class="w-2xl rounded-box shadow-md">
+        <div>
+            <h1 class="text-3xl font-bold">Welcome to Apply Tracker!</h1>
+            <p class="py-4">
+                Keep track of your college and university applications, documents, tasks and deadlines
+                all in one place.
+            </p>
+            {% if user.is_authenticated %}
+                <p class="mb-4">Hello again, <b>{{ user.username }}</b>.</p>
+                <div class="flex flex-wrap gap-2">
+                    <a href="{% url 'applications' %}" class="btn btn-primary">Applications</a>
+                    <a href="{% url 'tasks' %}" class="btn btn-secondary">Tasks</a>
+                    <a href="{% url 'calendar' %}" class="btn btn-accent">Calendar</a>
+                </div>
+            {% else %}
+                <div class="flex flex-wrap gap-2">
+                    <a href="{% url 'register' %}" class="btn btn-primary">Get Started</a>
+                    <a href="{% url 'login' %}" class="btn btn-secondary">Log In</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div class="card bg-base-100 shadow-md">
+        <div class="card-body">
+            <h2 class="card-title">Universities</h2>
+            <p>Browse the registered universities and their application portals.</p>
+            <div class="card-actions justify-end">
+                <a href="{% url 'universities' %}" class="btn btn-primary btn-sm">Open Universities</a>
+            </div>
+        </div>
+    </div>
+    <div class="card bg-base-100 shadow-md">
+        <div class="card-body">
+            <h2 class="card-title">Courses</h2>
+            <p>Find courses and create a new application for the one you want.</p>
+            <div class="card-actions justify-end">
+                <a href="{% url 'courses' %}" class="btn btn-primary btn-sm">Open Courses</a>
+            </div>
+        </div>
+    </div>
+    <div class="card bg-base-100 shadow-md">
+        <div class="card-body">
+            <h2 class="card-title">Professors</h2>
+            <p>Look up registered professors and their contact details.</p>
+            <div class="card-actions justify-end">
+                <a href="{% url 'professors' %}" class="btn btn-primary btn-sm">Open Professors</a>
+            </div>
+        </div>
+    </div>
+    {% if user.is_authenticated %}
+    <div class="card bg-base-100 shadow-md">
+        <div class="card-body">
+            <h2 class="card-title">Documents</h2>
+            <p>Manage the documents used across all of your applications.</p>
+            <div class="card-actions justify-end">
+                <a href="{% url 'documents' %}" class="btn btn-primary btn-sm">Open Documents</a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    <div class="card bg-base-100 shadow-md">
+        <div class="card-body">
+            <h2 class="card-title">Manual</h2>
+            <p>New here? The manual walks you through everything Apply Tracker can do.</p>
+            <div class="card-actions justify-end">
+                <a href="{% url 'manual' %}" class="btn btn-primary btn-sm">Read the Manual</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

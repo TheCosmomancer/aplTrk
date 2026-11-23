@@ -1,12 +1,32 @@
+@font-face {
+  font-family: "JetBrainsMono Nerd Font";
+  src: url('./JetBrainsMonoNerdFontPropo-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 @import "tailwindcss";
 
-@source "../templates/**";
+@source "../templates/*";
 
 @source not "./daisyui{,*}.mjs";
 
-@plugin "./daisyui.mjs";
+@plugin "./daisyui.mjs"{
+   themes: business --default;
+ }
 
 /* Optional for custom themes – Docs: https://daisyui.com/docs/themes/#how-to-add-a-new-custom-theme */
 @plugin "./daisyui-theme.mjs"{
   /* custom theme here */
+}
+
+.max-w-75-sc {
+  max-width: 75vw;
+}
+.max-h-75-sc {
+  max-height: 75vw;
+}
+.min-h-200 {
+  min-height: calc(var(--spacing) * 200);
 }

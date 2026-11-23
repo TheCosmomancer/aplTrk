@@ -1,0 +1,132 @@
+{% extends "layout.html" %}
+{% load static %}
+
+{% block calendar_active %}menu-active{% endblock %}
+
+{% block script %}
+  <script type="module" src="https://unpkg.com/cally"></script>
+  <script>
+    function fmtDate(date) {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const deadlineData = document.getElementById('deadline-data');
+      const deadlines = new Map();
+
+      deadlineData.querySelectorAll('[data-deadline]').forEach((el) => {
+        const date = el.dataset.deadline;
+        if (!deadlines.has(date)) deadlines.set(date, []);
+        deadlines.get(date).push({
+          title: el.dataset.title,
+          completed: el.dataset.completed === 'true',
+          url: el.dataset.url,
+        });
+      });
+
+      const calendar = document.getElementById('my-calendar');
+      const heading = document.getElementById('deadline-heading');
+      const list = document.getElementById('deadline-list');
+
+      function render(date) {
+        const tasks = deadlines.get(date) || [];
+        heading.textContent = tasks.length ? `Deadlines on ${date}`: `No deadlines on ${date}`;
+        list.replaceChildren();
+
+        if (!tasks.length) {
+          const empty = document.createElement('li');
+          empty.className = 'opacity-70';
+          empty.textContent = 'Nothing is due on this day.';
+          list.append(empty);
+          return;
+        }
+
+        tasks.forEach((task) => {
+          const item = document.createElement('li');
+          item.className = 'flex items-center gap-2';
+
+          const icon = document.createElement('span');
+          icon.style.fontFamily = "'JetBrainsMono Nerd Font'";
+          icon.className = task.completed ? 'text-success' : 'text-primary';
+          icon.textContent = task.completed ? '' : '';
+
+          const link = document.createElement('a');
+          link.href = task.url;
+          link.className = 'link link-hover';
+          link.textContent = task.title;
+          if (task.completed) link.classList.add('line-through', 'opacity-70');
+
+          item.append(icon, link);
+          list.append(item);
+        });
+      }
+
+      customElements.whenDefined('calendar-date').then(() => {
+        calendar.getDayParts = (date) => {
+          return deadlines.has(fmtDate(date)) ? 'has-deadline' : '';
+        };
+
+        calendar.addEventListener('change', (e) => {
+          render(String(e.target.value).split('T')[0]);
+        });
+
+        const today = fmtDate(new Date());
+        if (calendar.value) {
+          render(String(calendar.value).split('T')[0]);
+        } else if (deadlines.has(today)) {
+          render(today);
+        }
+      });
+    });
+  </script>
+  <style>
+    #my-calendar calendar-month::part(has-deadline) {
+      background-color: var(--color-warning);
+      color: var(--color-warning-content);
+      border-radius: var(--radius-field);
+      font-weight: 600;
+    }
+    #my-calendar calendar-month::part(has-deadline):hover {
+      background-color: var(--color-warning);
+    }
+    #my-calendar calendar-month::part(selected has-deadline) {
+      background-color: var(--color-base-100);
+      color: var(--color-base-content);
+      outline: 2px solid var(--color-warning);
+      outline-offset: -2px;
+    }
+  </style>
+{% endblock %}
+
+{% block body %}
+<div class="flex flex-col gap-4 items-center justify-center">
+  <calendar-date id="my-calendar" class="cally bg-base-100 border border-base-300 shadow-lg rounded-box w-full max-w-md">
+    <span aria-label="Previous" class="fill-current size-4" slot="previous" style="font-family: 'JetBrainsMono Nerd Font';"></span>
+    <span aria-label="Next" class="fill-current size-4" slot="next" style="font-family: 'JetBrainsMono Nerd Font';"></span>
+    <calendar-month></calendar-month>
+  </calendar-date>
+
+  <div class="card bg-base-100 border border-base-300 shadow-lg rounded-box w-full max-w-md">
+    <div class="card-body">
+      <h2 id="deadline-heading" class="card-title">Deadlines</h2>
+      <ul id="deadline-list" class="flex flex-col gap-2 text-sm">
+        <li class="opacity-70">Select a date to see its deadlines.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<ul id="deadline-data" class="hidden">
+  {% for task in calendar %}
+    {% if task.deadline %}
+    <li data-deadline="{{ task.deadline|date:'Y-m-d' }}"
+        data-title="{{ task.title }}"
+        data-completed="{{ task.completed|yesno:'true,false' }}"
+        data-url="{% url 'tasks' %}?q={{ task.title|urlencode }}"></li>
+    {% endif %}
+  {% endfor %}
+</ul>
+{% endblock %}

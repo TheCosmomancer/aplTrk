@@ -1,0 +1,50 @@
+{% extends "layout.html" %}
+
+{% block professors_active %}menu-active{% endblock %}
+
+{% block body %}
+
+<form class="flex flex-col gap-4 p-4 min-h-200" action="{% url 'prfshop' %}" method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  {% if id %}<input type="hidden" name="id" value="{{ id }}">{% endif %}
+  <input type="hidden" name="university" value="{{ university.id }}">
+    <fieldset class="fieldset w-full max-w-md mx-auto">
+      <label class="fieldset-legend" for="disabled">University</label>
+      <input type="text" id="disabled" value="{{ university.name }}" class="input w-full" disabled />
+    </fieldset>
+  <input type="hidden" name="action" value="{% if action %}{{ action }}{% else %}new{% endif %}">
+
+  
+  <fieldset class="fieldset w-full max-w-md mx-auto">
+    <label class="fieldset-legend" for="name">Name</label>
+    <input type="text" id="name" name="name" class="input w-full" placeholder="Name" {% if edittitle %}value="{{ edittitle }}"{% endif %} required>
+  </fieldset>
+  
+  <fieldset class="fieldset w-full max-w-md mx-auto">
+    <label class="fieldset-legend" for="field">Field Of Study</label>
+    <input type="text" id="field" name="field" class="input w-full" placeholder="Computer Science, Cloud Computing, etc." {% if editfield %}value="{{ editfield }}"{% endif %} required>
+  </fieldset>
+  
+  <fieldset class="fieldset w-full max-w-md mx-auto">
+    <label class="fieldset-legend" for="email">Email</label>
+    <input type="email" id="email" name="email" class="input validator w-full" placeholder="mail@site.com" value="{% if editemail %}{{ editemail }}{% endif %}" required>
+  </fieldset>
+
+
+  <fieldset class="fieldset flex-1 flex flex-col mx-auto w-200 max-w-75-sc">
+    <legend class="fieldset-legend">Mailling Guide</legend>
+    <textarea class="textarea w-full flex-1 min-h-48 resize-none" name="guide" placeholder="Format of mail expected (if there is one)">{% if editguide %}{{ editguide }}{% endif %}</textarea>
+    <div class="label">Optional</div>
+  </fieldset>
+
+  <fieldset class="fieldset flex-1 flex flex-col mx-auto w-200 max-w-75-sc">
+    <legend class="fieldset-legend">Notes</legend>
+    <textarea class="textarea w-full flex-1 min-h-48 resize-none" name="note" placeholder="Notes, Links, etc.">{% if editnote %}{{ editnote }}{% endif %}</textarea>
+    <div class="label">Optional</div>
+  </fieldset>
+
+  <button class="btn btn-primary w-full max-w-md mx-auto" type="submit">Save</button>
+</form>
+
+{% endblock %}
+

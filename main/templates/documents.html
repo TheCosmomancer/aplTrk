@@ -1,0 +1,64 @@
+{% extends "layout.html" %}
+{% load static %}
+{% load file_extras %}
+
+{% block script %}<script src="{% static 'search.js' %}"></script>{% endblock %}
+
+{% block documents_active %}menu-active{% endblock %}
+
+{% block body %}
+<div class="flex flex-row justify-between">
+  <label class="input grow">
+    <span style="font-family: 'JetBrainsMono Nerd Font';"></span>
+    <input id="searchbar" type="search" class="grow" placeholder="Filter By Name..." autofocus>
+  </label>
+  <a href="{% url 'newdoc' %}" class="btn btn-square btn-ghost btn-success" style="font-family: 'JetBrainsMono Nerd Font';">󱔗</a>
+</div>
+
+<ul class="list bg-base-100 rounded-box shadow-md">
+
+    {% for doc in documents %}
+    
+    <li class="toggle-on-search border border-secondary rounded-md mt-2" data-name="{{ doc.title }}">
+        <div class="p-4">
+        <span class="text-lg" >{{ doc.title }}</span><br><br>
+        <span class="list-col-wrap text-xs">
+        {% if doc.content %}{{ doc.content }}{% endif %}
+        </span><br><div class="text-end">
+        <form action="{% url 'docshop' %}" method="post" class="inline">
+            {% csrf_token %}
+            <input type="hidden" name="id" value="{{ doc.id }}">
+            <button type="submit" name="action" value="remove" class="btn btn-square btn-ghost btn-error" style="font-family: 'JetBrainsMono Nerd Font';"></button>
+        </form>
+        <form action="{% url 'docshop' %}" method="get" class="inline">
+            <input type="hidden" name="id" value="{{ doc.id }}">
+            <button type="submit" name="action" value="edit" class="btn btn-square btn-ghost btn-warning" style="font-family: 'JetBrainsMono Nerd Font';"></button>
+        </form>
+        <form action="{% url 'newtask' %}" method="get" class="inline">
+            <input type="hidden" name="id" value="{{ doc.id }}">
+            <input type="hidden" name="target" value="document">
+            <button type="submit" class="btn btn-square btn-ghost btn-success" style="font-family: 'JetBrainsMono Nerd Font';"></button>
+        </form>
+        </div>
+
+        {% if doc.document %}
+        <details class="collapse collapse-plus bg-base-100 border border-base-300" name="my-accordion-det-1">
+        <summary class="collapse-title font-semibold">{{ doc.filename }}</summary>
+        <div class="collapse-content text-sm list-row flex justify-center">
+            {% if doc.document %}
+                {% if doc.document|is_image %}
+                    <img src="{{ doc.document.url }}" alt="{{ doc.title|default:'' }}" class="max-h-200 max-w-75-sc" loading="lazy">
+                {% else %}
+                    <iframe src="{{ doc.document.url }}" class="h-150 w-full max-h-75-sc max-w-75-sc" loading="lazy"></iframe>
+                {% endif %}
+            {% endif %}
+        </div>
+        </details>
+        {% endif %}
+    </li>
+
+    {% endfor %}
+
+</ul>
+
+{% endblock %}

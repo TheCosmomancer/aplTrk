@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+
+{% block manual_active %}menu-active{% endblock %}
+
+{% block body %}
+<div>
+    <h1 class="text-3xl">Welcome to Apply Tracker!</h1><br><br>
+    <p>
+        Apply Tracker is a web application for keeping track of your collage or university applications.<br><br>
+        To get started first please take a look at the <b>Documents</b> page. These will be used for all the applications you create.
+        A handful of common documents are created for you automaticlly when you sign up; feel free to add new ones and modify or remove the existing ones.<br><br>
+        Next take a look at the <b>Universites</b> page. Here you will find a list of all registered universites that can be filterd using the searchbar at the top.
+        Also keep in mind that universites, courses and professors can only be modified by admins.<br><br>
+        Now that you have an idea of which universites you want to apply for let's take a look at the <b>Courses</b> page. Here you can find all the courses that you can create applications for.
+        To create a new application select the <span style="font-family: 'JetBrainsMono Nerd Font';"></span> button from the options for that course.
+        You will be redirected to a page that will allow you to fill in the details for your application.<br><br>
+        When you finish creating your first application you will be redirected to the <b>Applications</b> page. Here you can view all of your applications,
+        modify them and add tasks for them.<br><br>
+        To create a task for a course or a document select the <span style="font-family: 'JetBrainsMono Nerd Font';"></span> button inside either ones options or
+        to create a task not related to a course or document select the <span style="font-family: 'JetBrainsMono Nerd Font';"></span> button at the top of the <b>Tasks page</b>.
+        Tasks allow you to keep track of everything you need to do. they can be related to an application or document for easier management and they can also have deadlines to keep track of time.<br><br>
+        Tasks that have a deadline will also show up in the <b>Calendar</b> page; Which will allow you to get a good view of all upcoming deadlines in one place.
+        You can click on a date to view all tasks for that day and the indicator in the sidebar will tell you at a glance if you
+        have any missed deadlines (red) or deadline coming up this week (yellow) that haven't been marked as compelete; Otherwise you will be presented with a nice calming green.<br><br>
+        Finally you can also find a list of registerd professors at the <b>Professors</b> page; Alongside (hopefuly) an email adress and a mailling guide to help you get in touch.<br><br>
+        That's about everthing. Good luck on your applications!
+    </p>
+</div>
+{% endblock %}
